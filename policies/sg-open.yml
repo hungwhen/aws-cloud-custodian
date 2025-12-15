@@ -1,0 +1,18 @@
+policies:
+    - name: enforce-no-open-sg
+      resource: security-group
+      mode:
+        type: cloudtrail
+        role: arn:aws:iam::626556194745:role/c7n-enforcer-role
+        events:
+         - source: ec2.amazonaws.com
+           event: AuthorizeSecurityGroupIngress
+         - source: ec2.amazonaws.com
+           event: CreateSecurityGroup
+      filters:
+        - type: ingress
+          Cidr: 0.0.0.0/0
+          Ports: [22,3389]
+      actions:
+        - type: remove-permissions
+          ingress: matched

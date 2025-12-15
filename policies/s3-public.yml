@@ -1,0 +1,21 @@
+policies :
+    - name: enforce-s3-public-block
+      resource: s3
+      mode:
+        type: cloudtrail
+        role: arn:aws:iam::626556194745:role/c7n-enforcer-role
+        events:
+            - source: s3.amazonaws.com
+              event: CreateBucket
+            - source: s3.amazonaws.com
+              event: PutBucketPolicy
+            - source: s3.amazonaws.com
+              event: PutPublicAccessBlock
+      filters:
+        - type: global-grants
+      actions:
+        - type: set-public-block
+          state: true
+
+        
+    

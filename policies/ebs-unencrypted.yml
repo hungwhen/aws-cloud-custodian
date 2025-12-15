@@ -1,0 +1,16 @@
+policies:
+    - name: enforce-ebs-encrypted
+      resource: ebs
+      mode:
+        type: cloudtrail
+        role: arn:aws:iam::626556194745:role/c7n-enforcer-role
+        events: 
+            - source: ec2.amazonaws.com
+              event: CreateVolume
+      filters:
+        - Encrypted: false
+      actions:
+        #mark for operations later, too complicated/risky to make an unencrypted volume encrypted
+        - type: mark-for-op
+          op: notify
+          days: 0
