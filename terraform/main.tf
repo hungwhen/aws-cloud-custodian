@@ -18,7 +18,7 @@ provider "aws" {
 
 data "archive_file" "lambda_zip" {
 	type = "zip"
-	source_dir = "${path.module}/lambda_src"
+	source_dir = "${path.module}/lambda"
 	output_path = "${path.module}/build/${var.function_name}.zip"
 }
 
@@ -73,7 +73,7 @@ data "aws_iam_policy_document" "lambda_policy" {
 	statement {
 		effect = "Allow"
 		actions = [
-			"ec2:DescribeSecurityGroup",
+			"ec2:DescribeSecurityGroups",
 			"ec2:RevokeSecurityGroupEgress",
 			"ec2:RevokeSecurityGroupIngress",
 			"ec2:CreateTags"
@@ -129,15 +129,21 @@ resource "aws_lambda_function" "c7n_runner" {
 	filename = data.archive_file.lambda_zip.output_path
 	source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
+
 	memory_size = var.lambda_memory_size
 	timeout = var.lambda_timeout
 
 	environment {
-		variables = {
-		AWS_REGION = var.region
-		C7N_POLICY_DIR = "var/task/policies"
-		}
+	  variables = {
+		C7N_POLICY_DIR  = "/var/task/policies"
+		HOME            = "/tmp"
+		XDG_CACHE_HOME  = "/tmp"
+	  }
 	}
+
+
+
+	layers = [aws_lambda_layer_version.c7n.arn]
 }
 
 #eventbridge
@@ -176,4 +182,10 @@ output "eventbridge_rule" {
 
 	value = aws_cloudwatch_event_rule.schedule.name
 
+}
+
+resource "aws_lambda_layer_version" "c7n" {
+  layer_name          = "cloud-custodian-py311"
+  filename            = "${path.module}/c7n-layer.zip"
+  compatible_runtimes = ["python3.11"]
 }

@@ -1,0 +1,15 @@
+policies:
+  - name: enforce-s3-public-block
+    resource: s3
+    filters:
+      - type: check-public-block
+        BlockPublicAcls: false
+        IgnorePublicAcls: false
+        BlockPublicPolicy: false
+        RestrictPublicBuckets: false
+    actions:
+      - type: set-public-block
+        BlockPublicAcls: true
+        IgnorePublicAcls: true
+        BlockPublicPolicy: true
+        RestrictPublicBuckets: true

@@ -1,0 +1,10 @@
+policies:
+  - name: enforce-no-open-sg
+    resource: security-group
+    filters:
+      - type: ingress
+        Cidr:
+          value: 0.0.0.0/0
+    actions:
+      - type: remove-permissions
+        ingress: matched

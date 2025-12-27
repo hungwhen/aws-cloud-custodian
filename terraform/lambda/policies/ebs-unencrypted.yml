@@ -1,0 +1,9 @@
+policies:
+  - name: enforce-ebs-encrypted
+    resource: ebs
+    filters:
+      - Encrypted: false
+    actions:
+      - type: tag
+        key: "c7n:needs-encryption"
+        value: "true"

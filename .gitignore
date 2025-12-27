@@ -1,27 +1,32 @@
-*.tfvars
-*.auto.tfvars
-secret.auto.tfvars
-
-
-# Visual Studio junk
-.vs/
-
-# Terraform working directory
+# Terraform
 .terraform/
-
-# Terraform state files
-*.tfstate
-*.tfstate.*
-
-# Crash logs
+terraform.tfstate
+terraform.tfstate.*
 crash.log
-crash.*.log
+terraform/build/
 
-# Ignore Terraform override files
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-# Terraform lock info (not the lock file)
-.terraform.tfstate.lock.info
+# Lambda vendored deps
+terraform/lambda/boto3/
+terraform/lambda/botocore/
+terraform/lambda/c7n/
+terraform/lambda/*.dist-info/
+
+# OS / IDE
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+.vs/
+# Python venvs
+.venv/
+terraform/.venv/
+**/.venv/
+# Lambda / Terraform build artifacts
+terraform/*.zip
+terraform/build/
