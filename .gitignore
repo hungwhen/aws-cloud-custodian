@@ -28,5 +28,5 @@ Thumbs.db
 terraform/.venv/
 **/.venv/
 # Lambda / Terraform build artifacts
-
+terraform/*.zip
 terraform/build/
